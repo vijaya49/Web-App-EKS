@@ -1,3 +1,12 @@
+### kubernetes Cluster Architecture
+
+![alt text](image-1.png)
+
+### EKS Cluster Architecture
+
+![alt text](image-2.png)
+
+
 ### EKS Cluster Creation
 ---
 ```yaml
@@ -110,9 +119,11 @@ Enables cluster-level logging via Amazon CloudWatch.
 eksctl create cluster -f eks-demo-cluster.yaml
 ```
 ---
+After creating a Kubernetes cluster with eksctl, the architecture of the services configured as of now is shown below.
+
 ![alt text](image.png)
 
----
+
 ✅ **Summary:**  
 This config will:
 
