@@ -72,6 +72,10 @@ Enables cluster-level logging via Amazon CloudWatch.
 
 - `enableTypes: ["*"]`: Enables all types of cluster logs (`api`, `audit`, `authenticator`, `controllerManager`, `scheduler`, etc.).
 
+```
+eksctl create cluster -f eks-demo-cluster.yaml
+```
+
 ✅ **Summary:**  
 This config will:
 
