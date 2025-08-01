@@ -355,3 +355,9 @@ You can now create Ingress resources using the AWS Load Balancer Controller. The
 - [cert-manager Documentation](https://cert-manager.io/docs/)
 - [AWS EKS Ingress Setup Guide](https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html)
 
+```
+git clone https://github.com/joozero/amazon-eks-flask.git
+git clone https://github.com/joozero/amazon-eks-frontend.git
+
+from these two links we need to build the images and push it to ECR
+```
