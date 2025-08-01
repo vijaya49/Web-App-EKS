@@ -142,7 +142,6 @@ This config will:
 ---
 ### Create AWS Load Balancer Controller
 
-```
 The AWS Load Balancer Controller  manages AWS Elastic Load Balancers for a Kubernetes cluster. The controller provisions the following resources.
 
 1. It satisfies Kubernetes 'Ingress' resources by provisioning Application Load Balancers.
@@ -153,12 +152,8 @@ The controller was formerly named the AWS ALB Ingress Controller. There are two 
  - Instance(default): Register nodes in the cluster as targets for ALB. Traffic reaching the ALB is routed to NodePort and then proxied to the Pod.
  - IP: Register the Pod as an ALB target. Traffic reaching the ALB is routed directly to the Pod. In order to use that traffic mode, you must explicitly specify it in the ingress.yaml file with comments.
 
-```
-
 Before deploying the AWS Load Balancer controller, we need to do some things. Because the controller operates over the worker node, you must make it accessible to AWS ALB/NLB resources through IAM permissions. IAM permissions can install IAM Roles for ServiceAccount or attach directly to IAM Roles on the worker node.
 
-```
-```
 1. First, create IAM OpenID Connect (OIDC) identity provider for the cluster. IAM OIDC provider must exist in the cluster(in this lab, eks-demo) in order for objects created by Kubernetes to use service account  which purpose is to authenticate to API Server or external services.
 
 ```bash
@@ -183,9 +178,9 @@ aws iam create-policy \
     --policy-name AWSLoadBalancerControllerIAMPolicy \
     --policy-document file://iam_policy.json
 ```
-```
+
 Create ServiceAccount for AWS Load Balancer Controller.
-```
+
 ```bash
 eksctl create iamserviceaccount \
     --cluster eks-demo \
