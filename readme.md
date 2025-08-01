@@ -109,7 +109,10 @@ Enables cluster-level logging via Amazon CloudWatch.
 ```
 eksctl create cluster -f eks-demo-cluster.yaml
 ```
+---
+![alt text](image.png)
 
+---
 ✅ **Summary:**  
 This config will:
 
