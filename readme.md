@@ -1,3 +1,37 @@
+### EKS Cluster Creation
+---
+```yaml
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: eks-demo
+  region: ${AWS_REGION}
+  version: "1.33"
+
+vpc:
+  cidr: "10.0.0.0/16"
+  nat:
+    gateway: Single
+
+managedNodeGroups:
+  - name: node-group
+    instanceType: m5.large
+    desiredCapacity: 3
+    volumeSize: 20
+    privateNetworking: true
+    iam:
+      withAddonPolicies:
+        imageBuilder: true
+        cloudWatch: true
+        autoScaler: true
+        ebs: true
+
+cloudWatch:
+  clusterLogging:
+    enableTypes: ["*"]
+```
+---
 🔹 apiVersion: eksctl.io/v1alpha5  
 This specifies the version of the eksctl configuration format.  
   
@@ -8,7 +42,7 @@ This tells eksctl that the file describes a cluster configuration.
 
 🔹 metadata  
 Basic metadata for the EKS cluster.
-
+---
 ```yaml
 name: eks-demo
 region: ${AWS_REGION}
@@ -18,7 +52,6 @@ version: "1.33"
 - `name`: Name of the EKS cluster.  
 - `region`: AWS region to deploy the cluster in (e.g., us-east-1, ap-south-1). Here, it uses a placeholder `${AWS_REGION}` — ensure this is set in your shell before running eksctl.  
 - `version`: Kubernetes version (1.33 here).
-
 🔹 vpc
 
 ```yaml
