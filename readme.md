@@ -168,17 +168,13 @@ eksctl utils associate-iam-oidc-provider \
     --approve
 ```
 
-```
 Check the OIDC provider URL of the cluster through the commands below.
 
-```
 ```bash
 aws eks describe-cluster --name eks-demo --query "cluster.identity.oidc.issuer" --output text
 ```
-
-```
 2. Create an IAM Policy to grant to the AWS Load Balancer Controller.
-```
+
 ```bash
 curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.13.3/docs/install/iam_policy.json
 ```
