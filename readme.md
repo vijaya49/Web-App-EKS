@@ -42,6 +42,7 @@ This tells eksctl that the file describes a cluster configuration.
 
 🔹 metadata  
 Basic metadata for the EKS cluster.
+
 ---
 ```yaml
 name: eks-demo
