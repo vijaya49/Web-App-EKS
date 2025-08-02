@@ -1,0 +1,63 @@
+# Production environment custom values
+aws:
+  accountId: "123456789012"
+  region: "us-west-2"
+
+# Override specific service configurations
+services:
+  - name: demo-flask-backend
+    enabled: true
+    replicas: 5  # Scale up for production
+    image:
+      repository: "{{ .Values.aws.accountId }}.dkr.ecr.{{ .Values.aws.region }}.amazonaws.com/demo-flask-backend"
+      tag: "v1.2.0"  # Specific version for production
+      pullPolicy: Always
+    service:
+      port: 8080
+      targetPort: 8080
+    ingress:
+      path: /contents
+      pathType: Prefix
+      healthcheckPath: /contents/aws
+      
+  - name: demo-nodejs-backend
+    enabled: true
+    replicas: 4
+    image:
+      repository: public.ecr.aws/y7c9e1d2/joozero-repo
+      tag: "v2.1.0"
+      pullPolicy: Always
+    service:
+      port: 8080
+      targetPort: 3000
+    ingress:
+      path: /services
+      pathType: Prefix
+      healthcheckPath: /services/all
+      
+  - name: demo-frontend
+    enabled: true
+    replicas: 6  # More replicas for frontend
+    image:
+      repository: "{{ .Values.aws.accountId }}.dkr.ecr.{{ .Values.aws.region }}.amazonaws.com/demo-frontend"
+      tag: "v3.0.1"
+      pullPolicy: Always
+    service:
+      port: 80
+      targetPort: 80
+    ingress:
+      path: /
+      pathType: Prefix
+      healthcheckPath: /
+
+# Production ingress with additional annotations
+ingress:
+  enabled: true
+  name: multi-service-prod-ingress
+  className: alb
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/group.name: eks-prod-group
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-west-2:123456789012:certificate/xxxxx

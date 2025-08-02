@@ -1,0 +1,56 @@
+{{- if .Values.flaskBackend.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.flaskBackend.name }}
+  namespace: {{ .Values.global.namespace }}
+  annotations:
+    alb.ingress.kubernetes.io/healthcheck-path: "{{ .Values.flaskBackend.ingress.healthcheckPath }}"
+spec:
+  selector:
+    app: {{ .Values.flaskBackend.name }}
+  type: NodePort
+  ports:
+    - port: {{ .Values.flaskBackend.service.port }}
+      targetPort: {{ .Values.flaskBackend.service.targetPort }}
+      protocol: TCP
+{{- end }}
+
+{{- if .Values.nodeBackend.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.nodeBackend.name }}
+  namespace: {{ .Values.global.namespace }}
+  annotations:
+    alb.ingress.kubernetes.io/healthcheck-path: "{{ .Values.nodeBackend.ingress.healthcheckPath }}"
+spec:
+  selector:
+    app: {{ .Values.nodeBackend.name }}
+  type: NodePort
+  ports:
+    - port: {{ .Values.nodeBackend.service.port }}
+      targetPort: {{ .Values.nodeBackend.service.targetPort }}
+      protocol: TCP
+{{- end }}
+
+{{- if .Values.frontend.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.frontend.name }}
+  namespace: {{ .Values.global.namespace }}
+  annotations:
+    alb.ingress.kubernetes.io/healthcheck-path: "{{ .Values.frontend.ingress.healthcheckPath }}"
+spec:
+  selector:
+    app: {{ .Values.frontend.name }}
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: {{ .Values.frontend.service.port }}
+      targetPort: {{ .Values.frontend.service.targetPort }}
+{{- end }}

@@ -1,0 +1,43 @@
+{{- if .Values.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: "multi-service-ingress"
+  namespace: {{ .Values.global.namespace }}
+  annotations:
+    {{- range $key, $value := .Values.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  ingressClassName: {{ .Values.ingress.className }}
+  rules:
+    - http:
+        paths:
+          {{- if .Values.frontend.enabled }}
+          - path: {{ .Values.frontend.ingress.path }}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.frontend.name }}
+                port:
+                  number: {{ .Values.frontend.service.port }}
+          {{- end }}
+          {{- if .Values.flaskBackend.enabled }}
+          - path: {{ .Values.flaskBackend.ingress.path }}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.flaskBackend.name }}
+                port:
+                  number: {{ .Values.flaskBackend.service.port }}
+          {{- end }}
+          {{- if .Values.nodeBackend.enabled }}
+          - path: {{ .Values.nodeBackend.ingress.path }}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.nodeBackend.name }}
+                port:
+                  number: {{ .Values.nodeBackend.service.port }}
+          {{- end }}
+{{- end }}

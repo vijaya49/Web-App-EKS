@@ -1,0 +1,30 @@
+{{- range .Values.services }}
+{{- if .enabled }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .name }}
+  namespace: {{ $.Values.global.namespace }}
+spec:
+  replicas: {{ .replicas }}
+  selector:
+    matchLabels:
+      app: {{ .name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .name }}
+    spec:
+      containers:
+        - name: {{ .name }}
+          {{- if contains "{{ .Values.aws.accountId }}" .image.repository }}
+          image: "{{ $.Values.aws.accountId }}.dkr.ecr.{{ $.Values.aws.region }}.amazonaws.com/{{ .name }}:{{ .image.tag }}"
+          {{- else }}
+          image: "{{ .image.repository }}:{{ .image.tag }}"
+          {{- end }}
+          imagePullPolicy: {{ .image.pullPolicy }}
+          ports:
+            - containerPort: {{ .service.targetPort }}
+{{- end }}
+{{- end }}

@@ -1,0 +1,66 @@
+# Global values
+global:
+  namespace: default
+  replicas: 3
+  
+# AWS Configuration
+aws:
+  accountId: ""  # Set this to your AWS Account ID
+  region: ""     # Set this to your AWS Region
+
+# Flask Backend Configuration
+flaskBackend:
+  enabled: true
+  name: demo-flask-backend
+  image:
+    repository: "" # Will be constructed as ${aws.accountId}.dkr.ecr.${aws.region}.amazonaws.com/demo-flask-backend
+    tag: latest
+    pullPolicy: Always
+  service:
+    port: 8080
+    targetPort: 8080
+  ingress:
+    path: /contents
+    healthcheckPath: /contents/aws
+  replicas: 3
+
+# Node.js Backend Configuration  
+nodeBackend:
+  enabled: true
+  name: demo-nodejs-backend
+  image:
+    repository: public.ecr.aws/y7c9e1d2/joozero-repo
+    tag: latest
+    pullPolicy: Always
+  service:
+    port: 8080
+    targetPort: 3000
+  ingress:
+    path: /services
+    healthcheckPath: /services/all
+  replicas: 3
+
+# Frontend Configuration
+frontend:
+  enabled: true
+  name: demo-frontend
+  image:
+    repository: "" # Will be constructed as ${aws.accountId}.dkr.ecr.${aws.region}.amazonaws.com/demo-frontend
+    tag: latest
+    pullPolicy: Always
+  service:
+    port: 80
+    targetPort: 80
+  ingress:
+    path: /
+    healthcheckPath: /
+  replicas: 3
+
+# Ingress Configuration
+ingress:
+  enabled: true
+  className: alb
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/group.name: eks-demo-group
